@@ -247,8 +247,6 @@ void FairPrimaryGenerator::AddTrack(Int_t pdgid, Double_t px_raw,
   vy += fVertex.Y();
   vz += fVertex.Z();
 
-  // cout << "FairPrimaryGenerator::AddTrack +Z" <<  fVertex.Z() << " pdgid " <<
-  // pdgid << "?"<< wanttracking << endl;
 
   TVector3 mom(px_raw, py_raw, pz_raw);
 

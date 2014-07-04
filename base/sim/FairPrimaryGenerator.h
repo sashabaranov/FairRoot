@@ -5,7 +5,6 @@
  *         GNU Lesser General Public Licence version 3 (LGPL) version 3, *
  *                  copied verbatim in the file "LICENSE" *
  ********************************************************************************/
-
 /** FairPrimaryGenerator.h
  *@author V.Friese  <v.friese@gsi.de>
  *
@@ -265,6 +264,7 @@ protected:
   void MakeEventPlane();
 
   ClassDef(FairPrimaryGenerator, 5);
+
 };
 
 #endif
