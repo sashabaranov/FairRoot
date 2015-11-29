@@ -1008,6 +1008,7 @@ TObject* FairRootManager::ActivateBranch(const char* BrName)
     return  fObj2[fNObj];
   }
   /**try to find the object decribing the branch in the folder structure in file*/
+<<<<<<< HEAD
   LOG(DEBUG) << "Try to find an object "
 	      << BrName << " describing the branch in the folder structure in file"
 	      << FairLogger::endl;
@@ -1019,6 +1020,50 @@ TObject* FairRootManager::ActivateBranch(const char* BrName)
 	LOG(INFO) << "Object "
 		  << BrName << " describing the branch in the folder structure was found" << FairLogger::endl;
 	break;
+=======
+  fLogger->Debug2(MESSAGE_ORIGIN, " Try to find an object %s decribing the branch in the folder structure in file", BrName);
+  for(Int_t i=0; i<fListFolder->GetEntriesFast(); i++) {
+    TFolder* fold = (TFolder*) fListFolder->At(i);
+    fObj2[fNObj] = fold->FindObjectAny(BrName);
+    if (fObj2[fNObj] ) {
+      fLogger->Debug(MESSAGE_ORIGIN, "object %s decribing the branch in the folder structure was found", BrName);
+      break;
+    }
+  }
+  if(!fObj2[fNObj]) {
+  // special FairShip case of stripped down root file
+      fRootFileSource->GetInChain()->SetBranchStatus(BrName,1);
+      fRootFileSource->GetInChain()->SetBranchAddress(BrName,&fObj2[fNObj]);
+   }
+  if(!fObj2[fNObj]) {
+    /** if we do not find an object corresponding to the branch in the folder structure
+    *  then we have no idea about what type of object is this and we cannot set the branch address
+    */
+    fLogger->Info(MESSAGE_ORIGIN, " Branch: %s  not found in Tree ", BrName);
+    //Fatal(" No Branch in the tree", BrName );
+    return 0;
+  } else {
+    if(fMixedInput) {
+      /** All branches has the same types in background and signal chains, thus
+       * we can set the branch address to al of them with one TClonesarray and then we call the proper
+       * fill in the read (event) entry
+       */
+
+      fLogger->Debug2(MESSAGE_ORIGIN, "Set the Branch address for background branch %s", BrName);
+      fRootFileSourceBKG->GetInChain()->SetBranchStatus(BrName,1);
+      fRootFileSourceBKG->GetInChain()->SetBranchAddress(BrName,&fObj2[fNObj]);
+
+      std::map<UInt_t, FairFileSource*>::const_iterator iter;
+      Int_t no=0;
+    
+      for(iter = fSignalTypeList.begin(); iter != fSignalTypeList.end(); iter++) {
+        fLogger->Debug2(MESSAGE_ORIGIN, "Set the Branch address for signal file number %i  and  branch %s ", no++ , BrName);
+        FairFileSource *signal=iter->second;
+        cout << "------------------------------" << signal<< endl;
+        TChain* currentChain=signal->GetInChain();
+        currentChain->SetBranchStatus(BrName,1);
+        currentChain->SetBranchAddress(BrName,&fObj2[fNObj]);
+>>>>>>> 4e2dbb917f22ec54061e8a763a3ad363a6c427f9
       }
     }
   }
