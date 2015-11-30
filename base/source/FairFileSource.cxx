@@ -211,11 +211,6 @@ Bool_t FairFileSource::Init()
     // with a different branch structure but the same tree name. ROOT
     // probably only checks if the name of the tree is the same.
     TList* list= dynamic_cast <TList*> (fRootFile->Get("BranchList"));
-<<<<<<< HEAD
-    if(list==0) {
-      LOG(FATAL) << "No Branch list in input file" << FairLogger::endl;
-    }
-=======
     if(list==0){
   // special FairShip case of stripped down root file, create list instead of doing core dump 
       list  = new TList();
@@ -227,45 +222,23 @@ Bool_t FairFileSource::Init()
       FairRootManager* fManager = FairRootManager::Instance();
       fManager->SetBranchNameList(list);
     }    
-    if(list==0){ fLogger->Fatal(MESSAGE_ORIGIN, "No Branch list in input file"); };
->>>>>>> 4e2dbb917f22ec54061e8a763a3ad363a6c427f9
+    if(list==0){ LOG(FATAL) << "No Branch list in input file" << FairLogger::endl; };
     TString chainName = fInputTitle;
     TString ObjName;
     fInputLevel.push_back(chainName);
     fCheckInputBranches[chainName] = new std::list<TString>;
     if(list) {
-<<<<<<< HEAD
-      TObjString* Obj=0;
-      LOG(DEBUG) << "Enteries in the list " 
-		 << list->GetEntries() << FairLogger::endl;
-      for(Int_t i =0; i< list->GetEntries(); i++) {
-	Obj=dynamic_cast <TObjString*> (list->At(i));
-	if(Obj!=0){
-	  ObjName=Obj->GetString();
-	  LOG(DEBUG) << "Branch name " << ObjName.Data()
-		     << FairLogger::endl;
-	  fCheckInputBranches[chainName]->push_back(ObjName.Data());
-	  
-	  FairRootManager::Instance()->AddBranchToList(ObjName.Data());
-	}
-      }
-=======
         TObjString* Obj=0;
-        fLogger->Info(MESSAGE_ORIGIN, "Entries in the list  %i", list->GetEntries());
+        LOG(INFO) << "Entries in the list  "<< list->GetEntries() << FairLogger::endl;
         for(Int_t i =0; i< list->GetEntries(); i++) {
             Obj=dynamic_cast <TObjString*> (list->At(i));
             if(Obj!=0){
                 ObjName=Obj->GetString();
-                fLogger->Info(MESSAGE_ORIGIN, "Branch name %s", ObjName.Data());
-                fCheckInputBranches[chainName]->push_back(ObjName.Data());
-                
-                if(fBranchNameList->FindObject(ObjName.Data())==0) {
-                    fBranchNameList->AddLast(Obj);
-                    fBranchSeqId++;
-                 }
+                LOG(INFO) << "Branch name "<< ObjName.Data() << FairLogger::endl;
+                fCheckInputBranches[chainName]->push_back(ObjName.Data());               
+                FairRootManager::Instance()->AddBranchToList(ObjName.Data());
             }
         }
->>>>>>> 4e2dbb917f22ec54061e8a763a3ad363a6c427f9
     }
 
     gROOT->GetListOfBrowsables()->Add(fCbmroot);
