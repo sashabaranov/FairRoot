@@ -55,9 +55,8 @@ FairEventManagerEditor::FairEventManagerEditor(const TGWindow* p, Int_t width, I
 
 void FairEventManagerEditor::Init()
 {
-  FairRootManager* fRootManager=fManager->GetFairRootManager();
-  if (fRootManager==0){return;};
-  if (fRootManager==0){fRootManager=new FairRootManager();};
+
+  FairRootManager* fRootManager=FairRootManager::Instance();
   TChain* chain =fRootManager->GetInChain();
   Int_t Entries= chain->GetEntriesFast();
 
@@ -66,10 +65,10 @@ void FairEventManagerEditor::Init()
   TGCompositeFrame* title1 = new TGCompositeFrame(fInfoFrame, 250, 10,
       kVerticalFrame | kLHintsExpandX |
       kFixedWidth    | kOwnBackground);
- 
+
   TString Infile= "Input file : ";
 //  TFile* file =FairRunAna::Instance()->GetInputFile();
-  TFile* file =fRootManager->GetInChain()->GetFile();
+  TFile* file =FairRootManager::Instance()->GetInChain()->GetFile();
   Infile+=file->GetName();
   TGLabel* TFName=new TGLabel(title1, Infile.Data());
   title1->AddFrame(TFName);
@@ -187,7 +186,7 @@ void FairEventManagerEditor::SelectEvent()
 
   TString time;
 // time+=(FairRootManager::Instance()->GetEventTime());
-  time.Form("%.2f", fManager->GetFairRootManager()->GetEventTime());
+  time.Form("%.2f", FairRootManager::Instance()->GetEventTime());
   time += " ns";
   fEventTime->SetText(time.Data());
 
