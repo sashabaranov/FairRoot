@@ -27,13 +27,12 @@ fi
 cd build
 
 export PATH=$SIMPATH/bin:$PATH
+installDir="${PWD/FairRoot/FairRootInst}"
 if [ "$distribution$version" = "ScientificCERNSLC6" ]; then
  xx=$($SIMPATH/bin/fairsoft-config --cxx)
- echo $xx
- cmake .. -DCMAKE_INSTALL_PREFIX="$PWD/../FairRootInst" -DCMAKE_CXX_COMPILER=$xx
+ cmake .. -DCMAKE_INSTALL_PREFIX=$installDir -DCMAKE_CXX_COMPILER=$xx
 else
- echo "installation directory $PWD/../FairRootInst"
- cmake .. -DCMAKE_INSTALL_PREFIX="$PWD/../FairRootInst"
+ cmake .. -DCMAKE_INSTALL_PREFIX=$installDir
 fi 
 make
 make install
