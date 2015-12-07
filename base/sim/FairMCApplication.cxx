@@ -283,7 +283,7 @@ FairMCApplication::~FairMCApplication()
   delete fActiveDetectors; // don't do fActiveDetectors->Delete() here
   // the modules are already deleted in FairRunSim
   delete fDetectors;
-//  delete gMC;
+  delete gMC;
   delete fModIter;
 //  gMC=0;
   //  LOG(DEBUG3) << "Leave Destructor of FairMCApplication"
